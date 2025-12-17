@@ -9,7 +9,7 @@ pipeline{
     }
 
     stages{
-        stage('clone repo'){
+        stage('Clone Repo'){
          steps{
             git branch: 'main', url:'https://github.com/rutujakk0921/CICD-Pipeline-using-Jenkins-GitHub-Webhook-Docker-Ubuntu-AWS-EC2.git'
             }
@@ -23,8 +23,7 @@ pipeline{
          stage('Stop & Remove Previous Container'){
             steps{
                 sh '''
-                    docker stop $CONTAINER_NAME ||
-                    true
+                    docker stop $CONTAINER_NAME || true
                     docker rm $CONTAINER_NAME || true
                 '''
             }
@@ -32,18 +31,16 @@ pipeline{
          stage('Docker Container Run'){
             steps{
                 sh '''
-                    docker run -d -p ${port}:${PORT}
-                    --name $CONTAINER_NAME $IMAGE_NAME
+                    docker run -d -p ${port}:${PORT} --name $CONTAINER_NAME $IMAGE_NAME
                 '''
             }
          }
-         stage('Sent Email notification'){
+         stage('Sent Email Notification'){
             steps{
-                emailtext(
+                emailext(
                     subject: "NestJS App Deployed Successfully on EC2!",
                     body: "Your Nest JS App Is Deployed! http://13.235.31.201:${PORT}/",
                     to: "${EMAIL}"  
-
                 )
             }
          }
