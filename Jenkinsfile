@@ -33,8 +33,18 @@ pipeline{
             steps{
                 sh '''
                     docker run -d -p ${port}:${PORT}
-                    --name $CONTAINER_NAME
+                    --name $CONTAINER_NAME $IMAGE_NAME
                 '''
+            }
+         }
+         stage('Sent Email notification'){
+            steps{
+                emailtext(
+                    subject: "NestJS App Deployed Successfully on EC2!",
+                    body: "Your Nest JS App Is Deployed! http://13.235.31.201:${PORT}/",
+                    to: "${EMAIL}"  
+
+                )
             }
          }
     }
